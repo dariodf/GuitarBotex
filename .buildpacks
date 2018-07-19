@@ -1,0 +1,6 @@
+https://github.com/fxtentacle/heroku-xvfb-buildpack.git
+https://github.com/fxtentacle/heroku-pdftk-buildpack.git
+https://github.com/dscout/wkhtmltopdf-buildpack.git
+https://github.com/gigalixir/gigalixir-buildpack-clean-cache.git
+https://github.com/HashNuke/heroku-buildpack-elixir.git
+https://github.com/gigalixir/gigalixir-buildpack-distillery.git
