@@ -4,6 +4,7 @@ defmodule GuitarBot do
   def start(_type, _args) do
     import Supervisor.Spec
     children = [
+      supervisor(GuitarBot.Repo, []),
       worker(GuitarBot.Otp.Worker, []),
     ]
 

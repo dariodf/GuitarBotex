@@ -25,6 +25,8 @@ defmodule GuitarBot.MixProject do
       {:floki, "~> 0.20.0"},
       # {:html5ever, "~> 0.6.0"},
       {:distillery, "~> 1.0.0"},
+      {:ecto, "~> 2.0"},
+      {:postgrex, "~> 0.11"},
       # Until it uses rustler 0.16, when installing html5ever do this:
       # cd deps/html5ever/native/html5ever_nif
       # cargo update
