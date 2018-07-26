@@ -1,5 +1,7 @@
 defmodule GuitarBot.Service.Telegram do
 
+  alias GuitarBot.Service.User
+
   def get_update_data(update) do
     case update do
       %{inline_query: inline_query} when not is_nil(inline_query) ->
@@ -55,4 +57,12 @@ defmodule GuitarBot.Service.Telegram do
     Nadia.answer_inline_query(inline_query_id, inline_results)
   end
 
+  def broadcast_message(text, user) do
+    if ("#{user.id}" == System.get_env("GUITARBOT_BROADCAST_ALLOWED_CHAT_ID")) do
+      User.get_users
+      |> Enum.map(fn(user)->
+        Nadia.send_message(user.chat_id, text)
+      end)
+    end
+  end
 end

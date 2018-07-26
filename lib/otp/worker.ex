@@ -2,9 +2,7 @@ defmodule GuitarBot.Otp.Worker do
   use GenServer
   require Logger
 
-  alias GuitarBot.{Repo, User}
-  alias GuitarBot.Service.TabScraper
-  alias GuitarBot.Service.Telegram
+  alias GuitarBot.Service.{TabScraper, Telegram, User}
   defmodule State do
     defstruct update_id: 0
   end
@@ -53,14 +51,14 @@ defmodule GuitarBot.Otp.Worker do
     end
   end
   def process_update({:message, data}) do
-    spawn(fn -> insert_user(data.user) end)
+    spawn(fn -> User.insert_user(data.user) end)
     case data.text do
+      "/broadcast " <> message -> Telegram.broadcast_message(message, data.user)
       _ -> handle_song_request(data.text, 0, data.chat_id)
-      #TODO: cases para comandos
     end
   end
   def process_update({:callback_query, data}) do
-    spawn(fn -> insert_user(data.user) end)
+    spawn(fn -> User.insert_user(data.user) end)
     [text, version] = String.split(data.text, ";", parts: 2)
     version = case Integer.parse(version) do
       {number, _} when is_integer(number) -> number
@@ -83,14 +81,6 @@ defmodule GuitarBot.Otp.Worker do
       {:error, error} -> Telegram.send_error_message(error, chat_id) # TODO Hacer una función genérica que responda mensaje según atom (ej.: :no_versions)
       error -> Logger.warn("#{inspect error}") # Reportarme error a mi
     end
-  end
-
-  defp insert_user(user) do
-    user = user
-    |> Map.from_struct
-    |> Map.put(:chat_id, user.id)
-    |>(&User.changeset(%User{},&1)).()
-    |> Repo.insert
   end
 
 end
